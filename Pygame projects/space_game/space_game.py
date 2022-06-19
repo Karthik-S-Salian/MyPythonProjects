@@ -212,7 +212,6 @@ class Game:
         self.show_score(self.score)
 
     def pause(self):
-        self.draw()
         pygame.mixer.music.pause()
         resume_img = pygame.image.load('resource/icons/exo_icon_play.png')
         self.game_status = 2
@@ -278,16 +277,19 @@ class Game:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if collision(self.restart_XY[0] + 75, self.restart_XY[1] + 15, mouseX, mouseY, 75, 15):
                             self.restart()
-                        elif collision(28, 78, mouseX, mouseY, 18, 18):
-                            self.init_fullscreen()
+#                        elif collision(28, 78, mouseX, mouseY, 18, 18):
+#                            self.init_fullscreen()
+
                 else:
                     (mouseX, mouseY) = pygame.mouse.get_pos()
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if collision(398, 298, mouseX, mouseY, 30, 30):
                             self.game_status = 1
                             pygame.mixer.music.unpause()
+                            """
                         elif collision(28, 78, mouseX, mouseY, 18, 18):
                             self.init_fullscreen()
+                
                 if self.is_fullscreen:
                     mouseX, mouseY = pygame.mouse.get_pos()
                     if collision(mouseX, mouseY, 800, 0):
@@ -296,6 +298,7 @@ class Game:
                             running = False
                     else:
                         self.quit_colour = (255, 255, 255)
+                """
             try:
                 if self.game_status == 1:
                     self.draw()
@@ -306,7 +309,7 @@ class Game:
             if not self.game_status == 1:
                 if self.game_status == 0:
                     self.game_over()
-                self.option()
+                #self.option()
                 self.show_score(self.score)
             if self.is_fullscreen:
                 self.fullscreen_mode()
