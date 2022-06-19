@@ -67,10 +67,6 @@ def  fun():
 
 
 
-
-
-
-
 def create_lamda():
     # lambda arguments: expressions
     # nameless functions
