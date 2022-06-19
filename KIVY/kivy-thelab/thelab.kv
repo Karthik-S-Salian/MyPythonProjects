@@ -1,0 +1,359 @@
+WidgetsLayoutExample
+<Screen1@Screen>:
+    name: "main"
+    id: scr1
+    CanvasExample5:
+    Widget:
+        Button:
+            text: "next"
+            on_press: root.on_button_press()
+            on_release:
+                app.root.current = "second"
+                root.manager.transition.direction = "left"
+
+<Screen2@Screen>:
+    name: "second"
+    WidgetsLayoutExample:
+    Widget:
+        BoxLayout:
+            orientation: "vertical"
+            Button:
+                text: "next"
+                on_release:
+                    app.root.current = "third"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "previous"
+                on_release:
+                    app.root.current = "main"
+                    root.manager.transition.direction = "right"
+
+<Screen3@Screen>:
+    name: "third"
+    CanvasExample7:
+    Widget:
+        BoxLayout:
+            orientation: "vertical"
+            Button:
+                text: "next"
+                on_release:
+                    app.root.current = "fourth"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "previous"
+                on_release:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "right"
+
+<Screen4@Screen>:
+    name: "fourth"
+    ScrollViewExample:
+    Widget:
+        BoxLayout:
+            orientation: "vertical"
+            Button:
+                text: "main"
+                on_release:
+                    app.root.current = "main"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "previous"
+                on_release:
+                    app.root.current = "third"
+                    root.manager.transition.direction = "right"
+
+
+
+<CanvasExample7@Widget>:
+    RelativeLayout:
+        canvas:
+            Color:
+                rgb: 0,1,1
+            Rectangle:
+                size: self.size
+    RelativeLayout:
+        canvas:
+            Color:
+                rgb: 0,1,0
+            Rectangle:
+                size: self.size
+    RelativeLayout:
+        canvas:
+            Color:
+                rgb: 1,1,0
+            Rectangle:
+                size: self.size
+
+
+
+
+<CanvasExample6@Widget>:
+    BoxLayout:
+        size: root.size
+        Widget:
+            canvas:
+                Color:
+                    rgb: 0,1,0
+                Rectangle:
+                    size: self.size
+        RelativeLayout:
+            canvas:
+                Color:
+                    rgb: 0,0,1
+                Rectangle:
+                    size: self.size
+
+
+<CanvasExample4>:
+    Button:
+        pos:"100dp","200dp"
+        text: "click"
+        on_press: root.on_button_click()
+
+
+<CanvasExample3@Widget>:
+    canvas:
+        Color:
+            rgba: 1,0,0,1
+        Line:
+            circle:(dp(200),dp(200),dp(100)) #center_x,  center_y ,radius
+            width: 2
+        Line:
+            ellipse:(dp(400),dp(300),dp(100),dp(200)) #center_x,  center_y ,radius_x , radius_y
+            width: 2
+        Color:
+            rgba: 0,1,1,1
+        Line:
+            rectangle:(dp(300),dp(300),dp(50),dp(100)) #pos_x,pos_y, size_x,  size_y
+            width: 2
+
+
+<CanvasExample2@Widget>:
+    canvas:
+        Line:
+            points: (0,self.center_y,self.width,self.center_y)
+            width: 2
+        Line:
+            points: (self.center_x,0,self.center_x,self.height)
+            width: 2
+            
+#: set siz dp(150)                                       # defining variable
+
+<CanvasExample1@Widget>:
+    canvas:
+        Rectangle:
+            pos: self.center_x - siz/2,self.center_y - siz/2
+            size: siz,siz
+        Ellipse:
+            pos: dp(150),dp(150)
+            size: siz,siz/2
+        Line:
+            points: (0,0,50,50)
+        Line:
+            points: (0,0,self.width/4,100,self.width/2,0,self.width*.75,100,self.width,0)
+            width: 2
+
+<ImageLayoutExample@GridLayout>:
+    cols: 4
+    Image:
+        source: "images/cake.jpg"            
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True
+
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True
+        keep_ratio: False
+
+
+
+
+<WidgetsLayoutExample>:
+    cols: 4
+    ToggleButton:
+        text: "OFF"
+        on_state: root.on_toogle_button_state(self)
+        #size_hint: None,1
+        #width: "400dp"
+    Button:
+        text: "Click here"
+        on_press: root.on_button_click()
+        disabled: not root.count_enabled
+    Label:
+        text: root.my_text
+        font_name: "fonts/Lcd.ttf"
+        font_size: "80dp"
+        color: (1,.5,1,1)
+
+    BoxLayout:
+        orientation: "vertical"
+        Switch:
+            id: my_switch
+            #on_active: root.on_switch_active(self)
+            size_hint: 1,1
+            active: True
+        Slider:
+            id: my_slider
+            min: 0
+            max: 100
+            value: 55
+            on_value: root.on_slider_value(self)
+            orientation: "horizontal"
+            disabled: not my_switch.active
+        Label:
+            text: str(int(my_slider.value))
+    ProgressBar:
+        max: 100
+        value: int(my_slider.value)
+    TextInput:
+        id: my_text_input
+        text: "  hghg"
+        multiline: False
+        on_text_validate: root.on_text_input_validate(self)
+    Label:
+        text: root.text_input_str
+
+
+
+<PageLayoutExample@PageLayout>:
+    MainWidget:
+    BoxLayoutExample:
+    AnchorLayoutExample:
+    ScrollViewExample:
+    GridLayoutExample:
+
+<ScrollViewExample@ScrollView>:
+    StackLayoutExample:
+        size_hint: 1,None
+        height: self.minimum_height
+
+
+<StackLayoutExample>:
+    # left->l right-> r top ->t  bottom  ->b
+    orientation:  "rl-bt"
+    padding: ("20dp","20dp","20dp","20dp")     # left,top,right,bottom
+    spacing: "20dp","20dp"                     #horizontal,vertical
+    Button:
+        text: "A"
+        size_hint: .2,.2
+    Button:
+        text: "B"
+        size_hint: .2,.2
+    Button:
+        text: "C"
+        size_hint: .2,.2
+    Button:
+        text: "D"
+        size_hint: .2,.2
+    Button:
+        text: "E"
+        size_hint: .2,.2
+    Button:
+        text: "F"
+        size_hint: .2,.2
+    Button:
+        text: "G"
+        size_hint: .2,.2
+
+<GridLayoutExample@GridLayout>:
+    rows: 3
+    cols: 3             #  cols =column rows=rows
+    Button:
+        text: "A"
+        size_hint: .5,1
+    Button:
+        text: "b"
+        size_hint: None,1
+        width: "150dp"
+    Button:
+        text: "c"
+    Button:
+        text: "d"
+        size_hint: .5,1
+    Button:
+        text: "e"
+        size_hint: None,1
+        width: "150dp"
+    Button:
+        text: "f"
+    Button:
+        text: "g"
+        size_hint: .5,1
+    Button:
+        text: "h"
+        size_hint: None,1
+        width: "150dp"
+    BoxLayoutExample:
+
+<AnchorLayoutExample@AnchorLayout>:
+    anchor_x: "center"                              #right,left,center
+    anchor_y: "top"                               #center,top,bottom
+    BoxLayout:
+        size_hint: 0.1,0.1
+        Button:
+            text: "A"
+        Button:
+            text: "b"
+
+
+<BoxLayoutExample@BoxLayout>:
+    orientation: "vertical"
+    Button:
+        text: "A"
+        size_hint: 1,0.5           # in terms of %    # changes size by _% from original for given layout
+    Button:
+        text: "B"
+        size_hint: None,None     # size fix the size does not allow to change as display size changes
+        size : "50dp","60dp"     # to use size in layout set size_hint to None
+    Button:
+        text: "C"
+        size_hint: None,None
+        width:"100dp"         # can use width and height instead of size
+        height: "100dp"          #default size value = "100dp","100dp"
+    Button:
+        text: "E"
+        size_hint: 1,None       # here width will be 100% , changes as display changes but ratio remains constant
+        height : "60dp"        # but height remains constant i.e 60dp
+    Button:
+        text: "S"
+        size_hint: .2,.6
+        pos_hint: {"x": .5 }       # for x "x" -> from left  "center_x" -> from center  "right"  ->from right
+                                   # for y "y" -> from bottom  "center_y" -> from center  "top"  ->from top
+    Label:
+        text: "D"
+    BoxLayout:
+        orientation: "horizontal"
+        Button:
+            text: "B1"
+        Button:
+            text: "B1"
+        Button:
+            text: "B1"
+        Button:
+            text: "B1"
+    BoxLayout:
+        orientation: "horizontal"
+        spacing: "10dp"
+        Button:
+            text: "B2"
+        Button:
+            text: "B2"
+        Button:
+            text: "B2"
+        Button:
+            text: "B2"
+
+
+<MainWidget@Widget>:
+    Button:
+        text: "Hello"
+        size: "50dp","30dp"
+        pos: "100dp","30dp"
+        color: 1,1,0,1
+
+    Label:
+        text: "world"
+        size: "50dp","30dp"
+        pos: "200dp","30dp"
+        color: 0,0,1,1

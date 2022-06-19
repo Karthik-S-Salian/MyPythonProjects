@@ -1,0 +1,27 @@
+kivy display
+
+(0,0) in bottom left
+x increases upwards
+y increases downwards
+# same as normal grafh
+
+
+dp = density independent pixel
+
+colour : r, g, b, a                  # a=alpha = visibility
+# all values in terms of %   i.e from  0-1
+
+orientation = vertical or horizontal  # default horizontal
+
+use # to comment in .kv file
+
+pos_hint {"starting from where x" : %,
+       "starting from where y" : %
+  }
+
+    when orientation : "vertical"
+ -># for x       "x" -> from left  "center_x" -> from center  "right"  ->from right
+    when orientation : "horizontal"
+   # for y       "y" -> from bottom  "center_y" -> from center  "top"  ->from top
+
+# canvas is always drawn by default at point (0,0)
