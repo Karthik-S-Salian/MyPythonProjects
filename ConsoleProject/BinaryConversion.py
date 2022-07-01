@@ -3,12 +3,9 @@ print("CONVERSION OF DECIMAL NUMBER TO BINARY NUMBER")
 
 def int_convert(value):
     remainder_list = list()
-    while True:
+    while value>0:
         remainder_list.append(value % 2)
         value = int(value / 2)
-        if value == 0:
-            break
-
     remainder_list.reverse()
     print(remainder_list)
 

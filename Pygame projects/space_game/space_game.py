@@ -202,7 +202,7 @@ class Game:
     def draw(self):
         shipX = self.ship.spaceX + 32
         shipY = self.ship.spaceY + 32
-        self.surface.blit(self.bg_img, (0, 0))
+        self.surface.fill((0,0,50))
         self.surface.blit(self.i_pause, (10, 50))
         self.ship.move()
         self.enemy.move(shipX, shipY)
@@ -224,16 +224,12 @@ class Game:
 
     def game_over(self):
         self.rewrite_highscore()
-        self.surface.blit(self.bg_img, (0, 0))
+        self.surface.fill((0,0,50))
         self.surface.blit(self.i_over, (250, 250))
         pygame.draw.rect(self.surface, (255, 255, 255), pygame.Rect(self.restart_XY[0], self.restart_XY[1], 150, 30))
         self.surface.blit(self.i_restart, self.restart_XY)
         display_score = self.font.render("HIGH SCORE: " + str(self.high_score), True, (255, 255, 255))
         self.surface.blit(display_score, (290, 150))
-
-    def option(self):
-        if not self.is_fullscreen:
-            self.surface.blit(self.full_scr_img, (10, 50))
 
     def fps_update(self):
         self.fps += 0.01
@@ -277,8 +273,6 @@ class Game:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if collision(self.restart_XY[0] + 75, self.restart_XY[1] + 15, mouseX, mouseY, 75, 15):
                             self.restart()
-#                        elif collision(28, 78, mouseX, mouseY, 18, 18):
-#                            self.init_fullscreen()
 
                 else:
                     (mouseX, mouseY) = pygame.mouse.get_pos()
@@ -286,19 +280,7 @@ class Game:
                         if collision(398, 298, mouseX, mouseY, 30, 30):
                             self.game_status = 1
                             pygame.mixer.music.unpause()
-                            """
-                        elif collision(28, 78, mouseX, mouseY, 18, 18):
-                            self.init_fullscreen()
-                
-                if self.is_fullscreen:
-                    mouseX, mouseY = pygame.mouse.get_pos()
-                    if collision(mouseX, mouseY, 800, 0):
-                        self.quit_colour = (255, 0, 0)
-                        if event.type == pygame.MOUSEBUTTONDOWN:
-                            running = False
-                    else:
-                        self.quit_colour = (255, 255, 255)
-                """
+
             try:
                 if self.game_status == 1:
                     self.draw()
@@ -309,7 +291,6 @@ class Game:
             if not self.game_status == 1:
                 if self.game_status == 0:
                     self.game_over()
-                #self.option()
                 self.show_score(self.score)
             if self.is_fullscreen:
                 self.fullscreen_mode()

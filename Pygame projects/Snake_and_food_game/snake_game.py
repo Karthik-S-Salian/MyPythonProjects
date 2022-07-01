@@ -1,9 +1,10 @@
-import pygame
-from pygame.locals import *
-import time
-import random
-
-size = 40
+from time import sleep
+from random import randint
+from pygame.constants import K_DOWN, K_RIGHT, K_LEFT, K_RETURN, K_UP, KEYDOWN, QUIT
+from pygame.image import load
+from pygame import init,mixer,display,event
+from pygame.font import SysFont
+size = 32
 
 class GAME_OVER(Exception):
     def __init__(self):
@@ -11,28 +12,26 @@ class GAME_OVER(Exception):
 
 class Apple:
     def __init__(self, parent_screen):
-        self.apple_img = pygame.image.load("resource/images/apple.jpg")
+        self.apple_img = load("resource/images/food.png").convert()
         self.parent_screen = parent_screen
-        self.appleX = size * random.randint(2, 24)
-        self.appleY = size * random.randint(2, 14)
+        self.appleX = size * randint(2, 13)
+        self.appleY = size * randint(3, 13)
 
     def draw(self):
         self.parent_screen.blit(self.apple_img, (self.appleX, self.appleY))
-        print(self.appleX,self.appleY)
 
     def move(self):
-        self.appleX = size * random.randint(2, 24)
-        self.appleY = size * random.randint(2, 14)
+        self.appleX = size * randint(1, 14)
+        self.appleY = size * randint(3, 13)
 
 
 class Snake:
     def __init__(self, parent_screen, length):
         self.length = length
         self.parent_screen = parent_screen
-        self.block = pygame.image.load("resource/images/block.jpg")
-        self.x = [size] * length
-        self.y = [size] * length
-        self.speed=3
+        self.block = load("resource/images/snake_body.png").convert()
+        self.x = [96] * length
+        self.y = [96] * length
         self.direction = ""
 
     def add_body(self):
@@ -65,111 +64,102 @@ class Snake:
             self.x[i] = self.x[i - 1]
             self.y[i] = self.y[i - 1]
         if self.direction == "UP":
-            self.y[0] -= self.speed
-        elif self.direction == "DOWN":
-            self.y[0] += self.speed
-        elif self.direction == "RIGHT":
-            self.x[0] += self.speed
-        elif self.direction == "LEFT":
-            self.x[0] -= self.speed
+            self.y[0] -= size
+        if self.direction == "DOWN":
+            self.y[0] += size
+        if self.direction == "RIGHT":
+            self.x[0] += size
+        if self.direction == "LEFT":
+            self.x[0] -= size
 
 
 class Game:
     def __init__(self):
-        pygame.init()
-        pygame.mixer.init()
-        self.surface = pygame.display.set_mode((1000, 600))
+        init()
+        mixer.init()
+        self.surface = display.set_mode((608, 608))
+        self.init_background()
         self.game_status = "RUN"
         self.snake = Snake(self.surface, 2)
         self.apple = Apple(self.surface)
-        self.init_background()
-        self.ding_wav = pygame.mixer.Sound("resource/music/ding.mp3")
-        self.crash_wav = pygame.mixer.Sound("resource/music/audio_dead.mp3")
-        self.fps=70
-        self.clock = pygame.time.Clock()
+        self.ding_wav = mixer.Sound("resource/music/ding.mp3")
+        self.crash_wav = mixer.Sound("resource/music/audio_dead.mp3")
 
     def collision(self, x1, y1, x2, y2):
         if abs(x2 - x1) < size and abs(y2 - y1) < size:
             return True
 
     def display_score(self):
-        score_font = pygame.font.SysFont('arial', 30)
-        score = score_font.render("SCORE: " + str(self.snake.length - 2), True, (255, 255, 255))
-        self.surface.blit(score, (800, 10))
+        score_font = SysFont('arial', 30)
+        score = score_font.render(str(self.snake.length - 2), True, (255, 255, 255))
+        self.surface.blit(score, (64, 20))
 
     def snake_collision(self):
-        if self.snake.x[0] < 0 or self.snake.y[0] < 0 or self.snake.x[0] > 1000 or self.snake.y[0] > 600:
+        if self.snake.x[0] < 32 or self.snake.y[0] < 96 or self.snake.x[0] > 545 or self.snake.y[0] > 545:
             return True
         for i in range(3, self.snake.length):
             if self.collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 return True
         return False
 
-    def music(self, s_type):
-        pygame.mixer.Sound.play(s_type)
-
     def init_background(self):
-        self.bg_img = pygame.image.load("resource/images/background.jpg")
+        self.bg_img = load("resource/images/ground.png")
         self.surface.blit(self.bg_img, (0, 0))
-        pygame.mixer.music.load("resource/music/bg_music_1.mp3")
-        pygame.mixer.music.play()
+        mixer.music.load("resource/music/bg_music_1.mp3")
+        mixer.music.play()
 
     def play(self):
         self.surface.blit(self.bg_img, (0, 0))
         self.snake.snake_move()
-        self.apple.draw()
-        self.snake.draw()
-        self.display_score()
-        pygame.display.flip()
 
         if self.collision(self.snake.x[0], self.snake.y[0], self.apple.appleX, self.apple.appleY):
-            self.music(self.ding_wav)
+            mixer.Sound.play(self.ding_wav)
             self.snake.add_body()
             self.apple.move()
 
         if self.snake_collision():
-            self.music(self.crash_wav)
+            mixer.Sound.play(self.crash_wav)
             raise GAME_OVER
 
-    def game_over(self):
-        pygame.mixer.music.pause()
+        self.snake.draw()
+        self.apple.draw()
         self.display_score()
-        self.surface.blit(self.bg_img, (0, 0))
-        over_font = pygame.font.SysFont('arial', 50)
+        display.update()
+
+    def game_over(self):
+        mixer.music.pause()
+        over_font = SysFont('arial', 50)
         over = over_font.render("GAME OVER", True, (255, 255, 255))
         restart = over_font.render("TO RESTART PRESS ENTER", True, (255, 255, 255))
-        self.surface.blit(over, (400, 250))
-        self.surface.blit(restart, (250, 350))
-        pygame.display.flip()
+        self.surface.blit(over, (200, 200))
+        self.surface.blit(restart, (25, 300))
+        self.display_score()
+        display.update()
 
     def restart(self):
-        pygame.mixer.music.unpause()
+        mixer.music.unpause()
         self.snake = Snake(self.surface, 2)
         self.apple = Apple(self.surface)
         self.game_status = "RUN"
 
-    def fps_update(self):
-        self.fps += 0.01
-        self.clock.tick(self.fps)
-
     def run(self):
         running = True
         while running:
-            for event in pygame.event.get():
-                if event.type == QUIT:
+            for eve in event.get():
+                if eve.type == QUIT:
                     running = False
-                if event.type == KEYDOWN:
+                if eve.type == KEYDOWN:
                     if self.game_status == "RUN":
-                        if event.key == K_UP:
+                        if eve.key == K_UP:
                             self.snake.move_up()
-                        if event.key == K_DOWN:
+                        if eve.key == K_DOWN:
                             self.snake.move_down()
-                        if event.key == K_RIGHT:
+                        if eve.key == K_RIGHT:
                             self.snake.move_right()
-                        if event.key == K_LEFT:
+                        if eve.key == K_LEFT:
                             self.snake.move_left()
                     elif self.game_status == "OVER":
-                        if event.key == K_RETURN:
+                        if eve.key == K_RETURN:
                             self.restart()
 
             try:
@@ -178,8 +168,7 @@ class Game:
             except GAME_OVER:
                 self.game_over()
                 self.game_status = "OVER"
-            self.fps_update()
-
+            sleep(0.2)
 
 
 if __name__ == "__main__":

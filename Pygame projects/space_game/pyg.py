@@ -9,7 +9,7 @@ screen = pygame.display.set_mode((800, 600))
 # CLOCK TO CONTROL ITERATION SPEED
 clock = pygame.time.Clock()
 
-background_img = pygame.image.load('resource/images/space.jpg')
+
 
 # ICON
 pygame.display.set_caption("SPACE LOOT")
@@ -113,7 +113,7 @@ running = True
 
 # MAIN GAME LOOP
 while running:
-    screen.blit(background_img, (0, 0))
+    screen.fill((0,0,50))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

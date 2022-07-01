@@ -7,8 +7,6 @@ class node:
     def __repr__(self):
         return str(self.value)
 
-
-
 class linked_list:
     def __init__(self, arg=None):
         self.length = 0
@@ -149,12 +147,6 @@ class linked_list:
                 return
             current = current.next_node
             count += 1
-
-
-
-
-
-
 
 if __name__ == '__main__':
     ln = linked_list([1, 2, 3, 4, 5, 6, 7])

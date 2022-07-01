@@ -19,9 +19,6 @@ playerX = 370
 playerY = 480
 playerX_change = 0
 
-# BACKGROUND
-background_img = pygame.image.load('resource/images/space.jpg')
-
 # ENEMY
 enemy_img = pygame.image.load('resource/images/alien (1).png')
 enemyX = []
@@ -77,8 +74,7 @@ def is_collide(object1_X, object1_Y, object2_X, object2_Y,lim=30):
 running = True
 while running:
 
-    screen.fill((0, 0, 0))
-    screen.blit(background_img, (0, 0))
+    screen.fill((0,0,50))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
