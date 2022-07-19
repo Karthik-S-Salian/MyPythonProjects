@@ -4,6 +4,7 @@ from kivy.config import Config
 Config.set('graphics', 'width', '900')
 Config.set('graphics', 'height', '400')
 
+
 from kivy.core.window import Window
 from kivy.graphics import Ellipse, Rectangle, Color
 from kivy.metrics import dp
@@ -33,24 +34,25 @@ class Pong(Screen):
         self.left_paddle_y=0
         self.right_dy=0
         self.left_dy=0
-        self.borders()
+        #self.borders()
         self.speed=0
 
 
     def borders(self):
         with self.canvas:
-            Color(1,1,0)
+            Color(1,.2,0)
             self.bottom_border=Rectangle(pos=(0,0))
             self.top_border=Rectangle()
 
 
     def update_borders(self):
-        self.top_border.pos = (0, self.height - self.height * 0.05)
-        self.top_border.size=(self.width, self.height * 0.05)
-        self.bottom_border.size=(self.width,self.height*0.05)
+        border_width =self.height * 0.05
+        self.top_border.pos = (0, self.height - border_width)
+        self.top_border.size=(self.width, border_width)
+        self.bottom_border.size=(self.width,border_width)
 
     def on_parent(self,m,n):
-        print("parent")
+        print('update')
         Clock.schedule_interval(self.update, 1 / 59)
         if self.is_desktop:
             self.keyboard = Window.request_keyboard(self.keyboard_closed, self)
@@ -98,7 +100,7 @@ class Pong(Screen):
     def on_size(self, *args):  # internal function
         self.speed=self.SPEED*self.height
         self.ball.pos = self.center
-        self.update_borders()
+        #self.update_borders()
         x=self.width*self.PADDLE_WIDTH
         y=self.PADDLE_HEIGHT*self.height
 
@@ -120,7 +122,7 @@ class Pong(Screen):
         self.right_paddle.pos=(self.right_paddle_x,self.right_paddle_y)
 
     def update(self, dt):  # user defined dt must bcs Clock.schedule_interval(self.update,.5)
-        print("update")
+        print(self.x_change)
         x, y = self.ball.pos
         w, h = self.ball.size
         self.update_paddle()
@@ -128,7 +130,7 @@ class Pong(Screen):
         c_y = y + self.y_change + h
         if c_x > self.width or self.x_change + x < 0:
             self.x_change *= -1
-        if c_y > self.height or self.y_change + y < 0:
+        if c_y > self.height or self.y_change+y< 0:
             self.y_change *= -1
         x += self.x_change
         y += self.y_change
